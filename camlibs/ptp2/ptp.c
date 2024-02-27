@@ -22,6 +22,7 @@
  * Boston, MA  02110-1301  USA
  */
 
+#include <time.h>
 #define _DEFAULT_SOURCE
 #include "config.h"
 #include "ptp.h"
@@ -2188,6 +2189,7 @@ ptp_getobjecthandles (PTPParams* params, uint32_t storage,
 
 	objecthandles->Handler = NULL;
 	objecthandles->n = 0;
+    return PTP_RC_OK;
 
 	PTP_CNT_INIT(ptp, PTP_OC_GetObjectHandles, storage, objectformatcode, associationOH);
 	ret=ptp_transaction(params, &ptp, PTP_DP_GETDATA, 0, &data, &size);
@@ -2196,7 +2198,7 @@ ptp_getobjecthandles (PTPParams* params, uint32_t storage,
 	} else {
 		if (	(storage == 0xffffffff) &&
 			(objectformatcode == 0) &&
-			(associationOH == 0)
+		 	(associationOH == 0)
 		) {
 			/* When we query all object handles on all stores and
 			 * get an error -> just handle it as "0 handles".
@@ -3567,7 +3569,6 @@ fallback:
 	if (changed) ptp_objects_sort (params);
 	return PTP_RC_OK;
 }
-
 
 static void
 handle_event_internal (PTPParams *params, PTPContainer *event)
